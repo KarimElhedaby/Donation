@@ -5,12 +5,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-
-
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import donation.solutions.hamza.com.donation.R;
+import donation.solutions.hamza.com.donation.model.User;
+import donation.solutions.hamza.com.donation.model.UserResponce;
+import donation.solutions.hamza.com.donation.service.ApiClient;
+import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.utils.Utilities;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.UsernameET)
@@ -21,12 +30,14 @@ public class RegisterActivity extends AppCompatActivity {
     EditText PasswordET;
     @BindView(R.id.CpasswordET)
     EditText CpasswordET;
+    @BindView(R.id.phoneET)
+    EditText phoneET;
     @BindView(R.id.genderRG)
     RadioGroup genderRG;
     @BindView(R.id.registerB)
     Button registerB;
 
-    String userName, password, cPassword, gender, email;
+    String userName, password, cPassword, gender, email, phone;
     String gender_index;
 
 
@@ -53,11 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         get_EnteredData();
-
-
-
     }
-
 
     private void get_EnteredData() {
         userName = UsernameET.getText().toString().trim();
@@ -65,8 +72,40 @@ public class RegisterActivity extends AppCompatActivity {
         cPassword = CpasswordET.getText().toString().trim();
         gender = gender_index;
         email = emailET.getText().toString().trim();
+        phone = phoneET.getText().toString().trim();
+    }
 
+    @OnClick(R.id.registerB)
+    void signUp() {
+        Utilities.showLoadingDialog(RegisterActivity.this, R.color.colorAccent);
+        get_EnteredData();
+        User user = new User(userName, email, password, phone);
+
+        ApiEndpointInterface apiService =
+                ApiClient.getClient().create(ApiEndpointInterface.class);
+
+        Call<UserResponce> call = apiService.signUp(user);
+
+        call.enqueue(new Callback<UserResponce>() {
+            @Override
+            public void onResponse(Call<UserResponce> call, Response<UserResponce> response) {
+                Utilities.dismissLoadingDialog();
+                if (response.isSuccessful()) {
+                    Timber.d(response.message().toString());
+                    Toast.makeText(RegisterActivity.this, response.body().toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponce> call, Throwable t) {
+                Utilities.dismissLoadingDialog();
+                Timber.d(t.getMessage().toString());
+                Toast.makeText(RegisterActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
+
+
 }
 

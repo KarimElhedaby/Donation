@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.Window;
 import android.widget.ProgressBar;
-
 import donation.solutions.hamza.com.donation.R;
 
 
@@ -17,7 +16,6 @@ public class Utilities {
     private static final String TAG = "Utilities";
 
     static Dialog progressDialog;
-
 
     public static void showLoadingDialog(Context context, int color) {
         try {

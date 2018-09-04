@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static ApiEndpointInterface apiServiceInterface;
+//    public static ApiEndpointInterface apiServiceInterface;
     public static final String BASE_URL = "https://kolloh.herokuapp.com/";
 
     private static Retrofit retrofit = null;
@@ -27,7 +27,7 @@ public class ApiClient {
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
-            apiServiceInterface = retrofit.create(ApiEndpointInterface.class);
+//            apiServiceInterface = retrofit.create(ApiEndpointInterface.class);
         }
         return retrofit;
     }
