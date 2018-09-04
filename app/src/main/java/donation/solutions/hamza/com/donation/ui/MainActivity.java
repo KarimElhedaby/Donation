@@ -1,11 +1,13 @@
-package donation.solutions.hamza.com.donation;
+package donation.solutions.hamza.com.donation.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import donation.solutions.hamza.com.donation.R;
 import donation.solutions.hamza.com.donation.ui.DonateProjectFragment;
 import donation.solutions.hamza.com.donation.ui.HistoryFragment;
 import donation.solutions.hamza.com.donation.ui.NotificationFragment;

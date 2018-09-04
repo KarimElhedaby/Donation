@@ -26,7 +26,6 @@ public class MyDonateHistoryFragment extends Fragment {
 
     public static MyDonateHistoryFragment newInstance() {
         MyDonateHistoryFragment fragment = new MyDonateHistoryFragment();
-
         return fragment;
     }
 

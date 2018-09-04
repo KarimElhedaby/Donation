@@ -13,7 +13,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import donation.solutions.hamza.com.donation.MainActivity;
 import donation.solutions.hamza.com.donation.R;
 
 

@@ -15,15 +15,14 @@ import android.view.ViewGroup;
 
 import donation.solutions.hamza.com.donation.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HistoryFragment extends Fragment {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
 
+
+    private Fragment currentFragment = null;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -43,13 +42,13 @@ public class HistoryFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
         mViewPager = view.findViewById(R.id.historycontainer);
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
 
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -93,4 +92,6 @@ public class HistoryFragment extends Fragment {
             return null;
         }
     }
+
+
 }
