@@ -7,7 +7,7 @@ buildscript {
             'targetSdk'       : 28,
             'compileSdk'      : 28,
             'buildTools'      : '26.0.2',
-            'supportLibrary'  : '28.0.0-alpha3',
+            'supportLibrary'  : '28.0.0-alpha1',
             'constraintLayout': '1.0.2',
             'butterKnife'     : '8.8.1',
             'glide'           : '4.6.1',

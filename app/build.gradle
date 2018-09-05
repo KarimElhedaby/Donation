@@ -46,6 +46,7 @@ dependencies {
 
     // image
     implementation "com.github.bumptech.glide:glide:${versions.glide}"
+    compile 'gun0912.ted:tedbottompicker:1.2.6'
 
     //circle image
     implementation 'de.hdodenhof:circleimageview:2.1.0'

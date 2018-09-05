@@ -9,7 +9,7 @@ import android.net.NetworkInfo;
 import android.view.Window;
 import android.widget.ProgressBar;
 
-import com.teamapp.teamapp.R;
+import donation.solutions.hamza.com.donation.R;
 
 
 public class Utilities {

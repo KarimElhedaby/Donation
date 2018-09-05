@@ -1,8 +1,10 @@
 package donation.solutions.hamza.com.donation.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +21,10 @@ public class DonateProjectFragment extends Fragment implements DonateProject_Ada
     @BindView(R.id.donateprojectRV)
     RecyclerView donateprojectRV;
     private DonateProject_Adapter donateProject_adapter;
+
+
+    @BindView(R.id.addProjectFBV)
+    FloatingActionButton addProjectBTN;
 
 //    private FragmentActivity myContext;
 //    android.app.FragmentManager fragManager = myContext.getFragmentManager();
@@ -46,7 +52,7 @@ public class DonateProjectFragment extends Fragment implements DonateProject_Ada
                 (new LinearLayoutManager(getContext()
                         , LinearLayoutManager.VERTICAL, false));
         donateProject_adapter = new DonateProject_Adapter(
-                R.layout.donateprojectrow, getContext() ,this);
+                R.layout.donateprojectrow, getContext(), this);
         donateprojectRV.setAdapter(donateProject_adapter);
 
 //        donateprojectRV.addOnItemTouchListener(
@@ -69,6 +75,18 @@ public class DonateProjectFragment extends Fragment implements DonateProject_Ada
 //                    }
 //                })
 //        );
+
+
+        addProjectBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentManager fm = getFragmentManager();
+                AddDonateProjectDialog donateDialog = new AddDonateProjectDialog();
+                donateDialog.show(fm, "Show fragment");
+
+            }
+        });
 
         return view;
     }
