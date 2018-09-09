@@ -15,6 +15,7 @@ import donation.solutions.hamza.com.donation.model.User;
 import donation.solutions.hamza.com.donation.model.UserResponce;
 import donation.solutions.hamza.com.donation.service.ApiClient;
 import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.utils.MyApplication;
 import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     String userName, password, cPassword, gender, email, phone;
     String gender_index;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
     void signUp() {
         Utilities.showLoadingDialog(RegisterActivity.this, R.color.colorAccent);
         get_EnteredData();
-        User user = new User(userName, email, password, phone);
+        final User user = new User(userName, email, password, phone);
 
         ApiEndpointInterface apiService =
                 ApiClient.getClient().create(ApiEndpointInterface.class);
@@ -89,10 +89,13 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<UserResponce>() {
             @Override
             public void onResponse(Call<UserResponce> call, Response<UserResponce> response) {
+
                 Utilities.dismissLoadingDialog();
                 if (response.isSuccessful()) {
+                    MyApplication.getPrefManager(RegisterActivity.this).storeUser(response.body());
                     Timber.d(response.message().toString());
                     Toast.makeText(RegisterActivity.this, response.body().toString(), Toast.LENGTH_LONG).show();
+
                 }
             }
 
@@ -100,12 +103,10 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFailure(Call<UserResponce> call, Throwable t) {
                 Utilities.dismissLoadingDialog();
                 Timber.d(t.getMessage().toString());
-                Toast.makeText(RegisterActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "some thing went wrong", Toast.LENGTH_LONG).show();
             }
         });
-
     }
-
 
 }
 

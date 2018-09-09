@@ -11,4 +11,7 @@ public interface ApiEndpointInterface {
     @POST("signup")
     Call<UserResponce> signUp(@Body User user);
 
+    @POST("login")
+    Call<UserResponce> signIn(@Body User user);
+
 }
