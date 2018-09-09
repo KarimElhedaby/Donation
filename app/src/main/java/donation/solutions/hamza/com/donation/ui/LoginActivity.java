@@ -3,6 +3,7 @@ package donation.solutions.hamza.com.donation.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,35 +63,45 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.loginB)
     void signIN() {
-        Utilities.showLoadingDialog(LoginActivity.this, R.color.colorAccent);
         get_EnteredData();
 
-        User user = new User(phone, password);
+        if (phone.isEmpty()) {
+            emailET.setError("Enter phone");
+        } else if (!Patterns.PHONE.matcher(phone).matches()) {
+            emailET.setError(getString(R.string.phone_format));
+        } else if (password.isEmpty()) {
+            passwordET.setError(getString(R.string.enter_password));
+        } else {
 
-        ApiEndpointInterface apiService =
-                ApiClient.getClient().create(ApiEndpointInterface.class);
+            Utilities.showLoadingDialog(LoginActivity.this, R.color.colorAccent);
 
-        Call<UserResponce> call = apiService.signIn(user);
+            User user = new User(phone, password);
 
-        call.enqueue(new Callback<UserResponce>() {
-            @Override
-            public void onResponse(Call<UserResponce> call, Response<UserResponce> response) {
-                Utilities.dismissLoadingDialog();
-                if (response.isSuccessful()) {
-                    MyApplication.getPrefManager(LoginActivity.this).storeUser(response.body());
-                    Timber.d(response.message().toString());
-                    Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_LONG).show();
+            ApiEndpointInterface apiService =
+                    ApiClient.getClient().create(ApiEndpointInterface.class);
+
+            Call<UserResponce> call = apiService.signIn(user);
+
+            call.enqueue(new Callback<UserResponce>() {
+                @Override
+                public void onResponse(Call<UserResponce> call, Response<UserResponce> response) {
+                    Utilities.dismissLoadingDialog();
+                    if (response.isSuccessful()) {
+                        MyApplication.getPrefManager(LoginActivity.this).storeUser(response.body());
+                        Timber.d(response.message().toString());
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<UserResponce> call, Throwable t) {
-                Utilities.dismissLoadingDialog();
-                Timber.d(t.getMessage().toString());
-                Toast.makeText(LoginActivity.this, "Error in mail or password", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<UserResponce> call, Throwable t) {
+                    Utilities.dismissLoadingDialog();
+                    Timber.d(t.getMessage().toString());
+                    Toast.makeText(LoginActivity.this, "Error in mail or password", Toast.LENGTH_LONG).show();
+                }
+            });
 
+        }
     }
 
 
