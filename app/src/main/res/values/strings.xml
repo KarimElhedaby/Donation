@@ -14,4 +14,5 @@
     <string name="confirm_pass_error">Error Confirm Password</string>
     <string name="check_gender">please check Gender</string>
     <string name="phone_format">Phone not formated well</string>
+    <string name="internal_storage">Internal Storage</string>
 </resources>

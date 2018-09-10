@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    //kari
+    //karim
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
