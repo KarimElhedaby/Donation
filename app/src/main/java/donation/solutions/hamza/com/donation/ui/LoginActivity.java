@@ -104,7 +104,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
 //    @OnClick(R.id.loginB)
 //    public void goHome() {
 //        startActivity(new Intent(LoginActivity.this, MainActivity.class));
