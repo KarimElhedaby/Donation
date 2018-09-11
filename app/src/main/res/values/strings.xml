@@ -15,4 +15,8 @@
     <string name="check_gender">please check Gender</string>
     <string name="phone_format">Phone not formated well</string>
     <string name="internal_storage">Internal Storage</string>
+
+    <string name="default_notification_channel_id" translatable="false">donation.solutions.hamza.com.donation.service.firebase</string>
+
+
 </resources>

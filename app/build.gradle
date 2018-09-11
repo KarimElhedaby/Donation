@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    //karim
+    //kari
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -36,12 +36,9 @@ dependencies {
     implementation 'com.airbnb.android:lottie:2.5.1'
     implementation 'com.synnapps:carouselview:0.1.5'
     implementation 'com.duolingo.open:rtl-viewpager:1.0.2'
-
-
     implementation 'com.github.polok:clicknumberpicker:0.1.2'
     implementation 'gun0912.ted:tedbottompicker:1.2.5'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
-
     implementation 'com.github.stfalcon:chatkit:0.2.2'
 
     // image
@@ -58,8 +55,8 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${versions.okhttp}"
     implementation "com.amitshekhar.android:rx2-android-networking:${versions.rx2Networking}"
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-
     implementation 'com.android.support:multidex:1.0.3'
+
     // font
     implementation "uk.co.chrisjenx:calligraphy:${versions.calligraphy}"
 
