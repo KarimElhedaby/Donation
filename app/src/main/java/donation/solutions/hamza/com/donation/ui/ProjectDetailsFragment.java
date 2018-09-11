@@ -11,24 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import donation.solutions.hamza.com.donation.R;
 import donation.solutions.hamza.com.donation.adapter.DonateDetails_Adapter;
 import donation.solutions.hamza.com.donation.model.AcceptedProjects;
-import donation.solutions.hamza.com.donation.model.DonateModel;
-import donation.solutions.hamza.com.donation.model.DonateResponse;
-import donation.solutions.hamza.com.donation.service.ApiClient;
-import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
-import donation.solutions.hamza.com.donation.service.AuthInterceptor;
-import donation.solutions.hamza.com.donation.utils.MyApplication;
-import donation.solutions.hamza.com.donation.utils.Utilities;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
+
 
 /**
  * A simple {@link Fragment} subclass.

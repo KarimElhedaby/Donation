@@ -24,7 +24,6 @@ import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -89,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                     Utilities.dismissLoadingDialog();
                     if (response.isSuccessful()) {
                         MyApplication.getPrefManager(LoginActivity.this).storeUser(response.body());
-                        Timber.d(response.message().toString());
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     }
                 }
@@ -97,7 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UserResponce> call, Throwable t) {
                     Utilities.dismissLoadingDialog();
-                    Timber.d(t.getMessage().toString());
                     Toast.makeText(LoginActivity.this, "Error in mail or password", Toast.LENGTH_LONG).show();
                 }
             });

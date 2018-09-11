@@ -44,7 +44,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class AddDonateProjectDialog extends DialogFragment {
     //get access to Storage permsion
@@ -83,7 +82,7 @@ public class AddDonateProjectDialog extends DialogFragment {
         doneBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Timber.d(imagessParts.toString());
+
                 Utilities.showLoadingDialog(getContext(), R.color.colorAccent);
                 requestTitle = projectTitleET.getText().toString();
                 requestDesc = projectDescET.getText().toString();
@@ -181,7 +180,6 @@ public class AddDonateProjectDialog extends DialogFragment {
             public void onResponse(Call<AddRequestResponce> call, Response<AddRequestResponce> response) {
                 Utilities.dismissLoadingDialog();
                 if (response.isSuccessful()) {
-                    Timber.d(response.body().toString());
                     Toast.makeText(getContext(), "Successfully send your project :)", Toast.LENGTH_SHORT).show();
                     dismiss();
                 }
@@ -190,7 +188,6 @@ public class AddDonateProjectDialog extends DialogFragment {
 
             @Override
             public void onFailure(Call<AddRequestResponce> call, Throwable t) {
-                Timber.d(t.getMessage().toString());
                 Toast.makeText(getContext(), "Some thing went Wronge in your project..", Toast.LENGTH_SHORT).show();
                 dismiss();
             }

@@ -23,7 +23,6 @@ import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.UsernameET)
@@ -122,7 +121,6 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UserResponce> call, Throwable t) {
                     Utilities.dismissLoadingDialog();
-                    Timber.d(t.getMessage().toString());
                     Toast.makeText(RegisterActivity.this, "some thing went wrong", Toast.LENGTH_LONG).show();
                 }
             });

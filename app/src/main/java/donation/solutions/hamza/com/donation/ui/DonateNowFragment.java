@@ -26,7 +26,7 @@ import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,17 +81,14 @@ public class DonateNowFragment extends DialogFragment {
                 public void onResponse(Call<DonateResponse> call, Response<DonateResponse> response) {
                     Utilities.dismissLoadingDialog();
                     if (response.isSuccessful()) {
-                        Timber.d(response.body().toString());
                         Toast.makeText(getContext(), "Thank you :)", Toast.LENGTH_SHORT).show();
                         dismiss();
-
                     }
                 }
 
                 @Override
                 public void onFailure(Call<DonateResponse> call, Throwable t) {
                     Utilities.dismissLoadingDialog();
-                    Timber.d(t.getMessage().toString());
                     Toast.makeText(getContext(), t.getMessage().toString(), Toast.LENGTH_SHORT).show();
                     dismiss();
                 }

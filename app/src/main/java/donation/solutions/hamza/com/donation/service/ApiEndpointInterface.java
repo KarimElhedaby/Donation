@@ -9,6 +9,7 @@ import donation.solutions.hamza.com.donation.model.AcceptedProjects;
 import donation.solutions.hamza.com.donation.model.DonateModel;
 import donation.solutions.hamza.com.donation.model.DonateResponse;
 import donation.solutions.hamza.com.donation.model.HistoryOfDonation;
+import donation.solutions.hamza.com.donation.model.NotificationResponce;
 import donation.solutions.hamza.com.donation.model.RequestDonateHistory;
 import donation.solutions.hamza.com.donation.model.User;
 import donation.solutions.hamza.com.donation.model.UserResponce;
@@ -30,8 +31,10 @@ public interface ApiEndpointInterface {
     @POST("login")
     Call<UserResponce> signIn(@Body User user);
 
+
+
     @Multipart
-    @POST("request/")
+    @POST("request")
     Call<AddRequestResponce> addRequest(
             @Part("title") RequestBody title,
             @Part("desc") RequestBody desc,
@@ -49,5 +52,8 @@ public interface ApiEndpointInterface {
     @POST("request/{id}/donate")
     Call<DonateResponse> donateSend(@Path("id") String projectId,
                                     @Body DonateModel donateModel);
+
+    @GET("notif/user/{id}/notifications")
+    Call<ArrayList<NotificationResponce>> getNotifications(@Path("id") String id);
 
 }

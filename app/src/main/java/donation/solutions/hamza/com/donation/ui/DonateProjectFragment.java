@@ -30,7 +30,6 @@ import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class DonateProjectFragment extends Fragment {
 
@@ -78,7 +77,6 @@ public class DonateProjectFragment extends Fragment {
                 if (response.isSuccessful()) {
                     projects = new ArrayList<>();
                     projects = response.body();
-                    Timber.d(response.body().toString());
 
                     acceptedAdapter = new AcceptedProjectsAdapter(
                             R.layout.donate_history_row, response.body(), getContext(), new AcceptedProjectsAdapter.onProjectClickListner() {
@@ -100,7 +98,6 @@ public class DonateProjectFragment extends Fragment {
             @Override
             public void onFailure(Call<ArrayList<AcceptedProjects>> call, Throwable t) {
                 Utilities.dismissLoadingDialog();
-                Timber.d(t.getMessage().toString());
             }
         });
 

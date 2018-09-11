@@ -23,7 +23,6 @@ import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class MyDonateHistoryFragment extends Fragment {
 
@@ -70,7 +69,6 @@ public class MyDonateHistoryFragment extends Fragment {
             public void onResponse(Call<ArrayList<HistoryOfDonation>> call, Response<ArrayList<HistoryOfDonation>> response) {
                 Utilities.dismissLoadingDialog();
                 if (response.isSuccessful()) {
-                    Timber.d(response.body().toString());
 
                     donateHistory_adapter = new DonateHistory_Adapter(
                             R.layout.donate_history_row, response.body(), getContext());
@@ -82,7 +80,6 @@ public class MyDonateHistoryFragment extends Fragment {
             @Override
             public void onFailure(Call<ArrayList<HistoryOfDonation>> call, Throwable t) {
                 Utilities.dismissLoadingDialog();
-                Timber.d(t.getMessage().toString());
             }
         });
 

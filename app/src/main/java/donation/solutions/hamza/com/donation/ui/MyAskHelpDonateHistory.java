@@ -24,7 +24,6 @@ import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +65,6 @@ public class MyAskHelpDonateHistory extends Fragment {
             public void onResponse(Call<ArrayList<RequestDonateHistory>> call, Response<ArrayList<RequestDonateHistory>> response) {
                 Utilities.dismissLoadingDialog();
                 if (response.isSuccessful()) {
-                    Timber.d(response.body().toString());
 
                     donateHistory_adapter = new DonateReqHistory_Adapter(
                             R.layout.donate_history_row, response.body(), getContext());
@@ -78,7 +76,6 @@ public class MyAskHelpDonateHistory extends Fragment {
             @Override
             public void onFailure(Call<ArrayList<RequestDonateHistory>> call, Throwable t) {
                 Utilities.dismissLoadingDialog();
-                Timber.d(t.getMessage().toString());
             }
         });
 

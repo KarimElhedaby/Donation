@@ -60,7 +60,7 @@ public class DonateReqHistory_Adapter extends RecyclerView.Adapter<DonateReqHist
         if (donations.get(position).getImg().size() != 0) {
             Glide.with(context).load(donations.get(position).getImg().get(0)).into(holder.donateHIstoryIV);
         }
-        holder.donateDateTV.setText(donations.get(position).getCreationDate());
+        holder.donateDateTV.setText(donations.get(position).getCreationDate().subSequence(0,10));
         holder.DonateDescriptionTV.setText(donations.get(position).getDesc());
         holder.donateHistoryTitleTV.setText(donations.get(position).getTitle());
 
