@@ -17,6 +17,7 @@ import donation.solutions.hamza.com.donation.model.User;
 import donation.solutions.hamza.com.donation.model.UserResponce;
 import donation.solutions.hamza.com.donation.service.ApiClient;
 import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.service.AuthInterceptor;
 import donation.solutions.hamza.com.donation.utils.MyApplication;
 import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
@@ -87,11 +88,9 @@ public class RegisterActivity extends AppCompatActivity {
             emailET.setError(getString(R.string.enter_email));
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailET.setError(getString(R.string.email_not_formatted));
-        }
-        else if (!Patterns.PHONE.matcher(phone).matches()) {
+        } else if (!Patterns.PHONE.matcher(phone).matches()) {
             emailET.setError(getString(R.string.phone_format));
-        }
-        else if (password.isEmpty()) {
+        } else if (password.isEmpty()) {
             PasswordET.setError(getString(R.string.enter_password));
         } else if (cPassword.isEmpty()) {
             CpasswordET.setError(getString(R.string.enter_cpassword));
@@ -104,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
             final User user = new User(userName, email, password, phone);
 
             ApiEndpointInterface apiService =
-                    ApiClient.getClient().create(ApiEndpointInterface.class);
+                    ApiClient.getClient(new AuthInterceptor(null)).create(ApiEndpointInterface.class);
 
             Call<UserResponce> call = apiService.signUp(user);
 
@@ -116,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         MyApplication.getPrefManager(RegisterActivity.this).storeUser(response.body());
 
-                        startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                     }
                 }
 

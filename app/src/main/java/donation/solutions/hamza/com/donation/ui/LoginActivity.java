@@ -18,6 +18,7 @@ import donation.solutions.hamza.com.donation.model.User;
 import donation.solutions.hamza.com.donation.model.UserResponce;
 import donation.solutions.hamza.com.donation.service.ApiClient;
 import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.service.AuthInterceptor;
 import donation.solutions.hamza.com.donation.utils.MyApplication;
 import donation.solutions.hamza.com.donation.utils.Utilities;
 import retrofit2.Call;
@@ -78,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             User user = new User(phone, password);
 
             ApiEndpointInterface apiService =
-                    ApiClient.getClient().create(ApiEndpointInterface.class);
+                    ApiClient.getClient(new AuthInterceptor(null)).create(ApiEndpointInterface.class);
 
             Call<UserResponce> call = apiService.signIn(user);
 

@@ -15,12 +15,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     //    public static ApiEndpointInterface apiServiceInterface;
-    public static final String BASE_URL = "https://donation-.herokuapp.com/";
+    public static final String BASE_URL = "https://donationp.herokuapp.com/";
 
     private static Retrofit retrofit = null;
 
-    public static Retrofit getClient() {
-
+    public static Retrofit getClient(AuthInterceptor authInterceptor) {
 
         OkHttpClient.Builder clientBuilder;
         OkHttpClient client;
@@ -31,7 +30,8 @@ public class ApiClient {
                 .addInterceptor(interceptor);
 
 
-        clientBuilder.addInterceptor(null);
+        clientBuilder.addInterceptor(authInterceptor);
+
         client = clientBuilder.build();
 
         if (retrofit == null) {
