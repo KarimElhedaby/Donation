@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,11 +31,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import donation.solutions.hamza.com.donation.R;
 import donation.solutions.hamza.com.donation.adapter.DonationProjectImagesAdapter;
-import donation.solutions.hamza.com.donation.model.Images;
+import donation.solutions.hamza.com.donation.model.AddRequestResponce;
+import donation.solutions.hamza.com.donation.service.ApiClient;
+import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.service.AuthInterceptor;
+import donation.solutions.hamza.com.donation.utils.FileUtils;
+import donation.solutions.hamza.com.donation.utils.MyApplication;
+import donation.solutions.hamza.com.donation.utils.Utilities;
 import gun0912.tedbottompicker.TedBottomPicker;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class AddDonateProjectDialog extends DialogFragment {
     //get access to Storage permsion
@@ -61,9 +70,9 @@ public class AddDonateProjectDialog extends DialogFragment {
     @BindView(R.id.donateprojectRV)
     RecyclerView donateProjectRV;
 
-    private ArrayList<Images> folderImages;
 
-    private List<MultipartBody.Part> imagessParts;
+    private List<MultipartBody.Part> imagessParts = new ArrayList<>();
+    String requestTitle, requestDesc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,6 +92,11 @@ public class AddDonateProjectDialog extends DialogFragment {
         doneBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Timber.d(imagessParts.toString());
+                Utilities.showLoadingDialog(getContext(), R.color.colorAccent);
+                requestTitle = projectTitleET.getText().toString();
+                requestDesc = projectDescET.getText().toString();
+
                 if (projectTitleET.getText().toString().equals("")) {
                     Toast.makeText(getContext(), "Please enter project title", Toast.LENGTH_SHORT).show();
                 } else if (projectDescET.getText().toString().equals("")) {
@@ -90,8 +104,33 @@ public class AddDonateProjectDialog extends DialogFragment {
                 } else if (images.size() == 0) {
                     Toast.makeText(getContext(), "Please select Project images", Toast.LENGTH_SHORT).show();
                 } else {
-                    dismiss();
-                    Toast.makeText(getContext(), "Done :)", Toast.LENGTH_SHORT).show();
+
+                    ApiEndpointInterface apiService =
+                            ApiClient.getClient(new AuthInterceptor(MyApplication.getPrefManager(getContext()).getUser().getToken())).create(ApiEndpointInterface.class);
+
+                    Call<AddRequestResponce> call = apiService.addRequest
+                            (RequestBody.create(MediaType.parse("text/plain"), requestTitle),
+                                    RequestBody.create(MediaType.parse("text/plain"), requestDesc),
+                                    imagessParts);
+
+                    call.enqueue(new Callback<AddRequestResponce>() {
+
+                        @Override
+                        public void onResponse(Call<AddRequestResponce> call, Response<AddRequestResponce> response) {
+                            Utilities.dismissLoadingDialog();
+                            if (response.isSuccessful()) {
+                                Timber.d(response.body().toString());
+                                dismiss();
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<AddRequestResponce> call, Throwable t) {
+                            Timber.d(t.getMessage());
+                        }
+                    });
+
                 }
             }
         });
@@ -113,6 +152,7 @@ public class AddDonateProjectDialog extends DialogFragment {
     }
 
     public void OpenImagePicker() {
+
         TedBottomPicker bottomSheetDialogFragment = new TedBottomPicker.Builder(getContext())
                 .setOnMultiImageSelectedListener(new TedBottomPicker.OnMultiImageSelectedListener() {
                     @Override
@@ -133,13 +173,10 @@ public class AddDonateProjectDialog extends DialogFragment {
                         List<File> imagesFiles = new ArrayList<>();
 
                         for (Uri uri : selectedImageUris) {
-
-                            String imagePath = getPath(getContext(), uri);
-                            File imageFile = new File(imagePath);
+                            File imageFile = FileUtils.getFile(getActivity(), uri);
                             imagesFiles.add(imageFile);
-
                         }
-                        convertImageFileToMultiPart(imagesFiles, imagessParts, null);
+                        convertImageFileToMultiPart(imagesFiles, imagessParts);
                     }
                 })
                 .setPeekHeight(1600)
@@ -149,41 +186,20 @@ public class AddDonateProjectDialog extends DialogFragment {
                 .create();
 
         bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager());
-    }
-
-    //
-//    private void convertImageFileToMultiPart(ArrayList<File> imageFiles, ArrayList<MultipartBody.Part> imagesParts) {
-//        for (int i = 0; i < imageFiles.size(); i++) {
-//            File file = imageFiles.get(i);
-//            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
-//            MultipartBody.Part filePart = MultipartBody.Part.createFormData("imgs", file.getName(), requestBody);
-//            imagesParts.add(filePart);
-//        }
-//
-//    }
-    @NonNull
-
-    private RequestBody parseStringToRequestBody(String text) {
-
-        return RequestBody.create(MediaType.parse("text/plain"), text);
 
     }
 
-
-    private void convertImageFileToMultiPart(List<File> imageFiles, List<MultipartBody.Part> imagesParts, String tag) {
+    private void convertImageFileToMultiPart(List<File> imageFiles, List<MultipartBody.Part> imagesParts) {
 
         for (int i = 0; i < imageFiles.size(); i++) {
 
             File file = imageFiles.get(i);
-
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
 
-            MultipartBody.Part filePart = MultipartBody.Part.createFormData(tag, file.getName(), requestBody);
-
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
             imagesParts.add(filePart);
 
         }
-
     }
 
 
