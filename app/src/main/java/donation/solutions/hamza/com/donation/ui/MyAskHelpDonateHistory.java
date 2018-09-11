@@ -9,10 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import donation.solutions.hamza.com.donation.R;
-import donation.solutions.hamza.com.donation.adapter.DonateHistory_Adapter;
+import donation.solutions.hamza.com.donation.adapter.DonateReqHistory_Adapter;
+import donation.solutions.hamza.com.donation.model.RequestDonateHistory;
+import donation.solutions.hamza.com.donation.service.ApiClient;
+import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.service.AuthInterceptor;
+import donation.solutions.hamza.com.donation.utils.MyApplication;
+import donation.solutions.hamza.com.donation.utils.Utilities;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +33,7 @@ public class MyAskHelpDonateHistory extends Fragment {
 
     @BindView(R.id.myAskDonateHistoryRv)
     RecyclerView myAskDonateHistoryRv;
-    private DonateHistory_Adapter donateHistory_adapter;
+    private DonateReqHistory_Adapter donateHistory_adapter;
 
     public MyAskHelpDonateHistory() {
         // Required empty public constructor
@@ -38,11 +50,38 @@ public class MyAskHelpDonateHistory extends Fragment {
         myAskDonateHistoryRv.setLayoutManager
                 (new LinearLayoutManager(getContext()
                         , LinearLayoutManager.VERTICAL, false));
-        donateHistory_adapter = new DonateHistory_Adapter(
-                R.layout.donate_history_row, getContext());
-        myAskDonateHistoryRv.setAdapter(donateHistory_adapter);
+
+        ArrayList<RequestDonateHistory> donation = new ArrayList<>();
+
+
+        Utilities.showLoadingDialog(getContext(), R.color.colorAccent);
+
+        ApiEndpointInterface apiService =
+                ApiClient.getClient(new AuthInterceptor(MyApplication.getPrefManager(getContext()).getUser().getToken())).create(ApiEndpointInterface.class);
+
+        Call<ArrayList<RequestDonateHistory>> call = apiService.getRequestDonateHistory();
+
+        call.enqueue(new Callback<ArrayList<RequestDonateHistory>>() {
+            @Override
+            public void onResponse(Call<ArrayList<RequestDonateHistory>> call, Response<ArrayList<RequestDonateHistory>> response) {
+                Utilities.dismissLoadingDialog();
+                if (response.isSuccessful()) {
+                    Timber.d(response.body().toString());
+
+                    donateHistory_adapter = new DonateReqHistory_Adapter(
+                            R.layout.donate_history_row, response.body(), getContext());
+                    myAskDonateHistoryRv.setAdapter(donateHistory_adapter);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<RequestDonateHistory>> call, Throwable t) {
+                Utilities.dismissLoadingDialog();
+                Timber.d(t.getMessage().toString());
+            }
+        });
+
         return view;
-
     }
-
 }

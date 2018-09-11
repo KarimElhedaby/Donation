@@ -1,5 +1,6 @@
 package donation.solutions.hamza.com.donation.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,25 +11,37 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import donation.solutions.hamza.com.donation.R;
+import donation.solutions.hamza.com.donation.adapter.AcceptedProjectsAdapter;
 import donation.solutions.hamza.com.donation.adapter.DonateProject_Adapter;
+import donation.solutions.hamza.com.donation.model.AcceptedProjects;
+import donation.solutions.hamza.com.donation.service.ApiClient;
+import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.service.AuthInterceptor;
+import donation.solutions.hamza.com.donation.utils.MyApplication;
+import donation.solutions.hamza.com.donation.utils.RecyclerItemClickListener;
+import donation.solutions.hamza.com.donation.utils.Utilities;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
-public class DonateProjectFragment extends Fragment implements DonateProject_Adapter.onProjectClickListner {
+public class DonateProjectFragment extends Fragment {
 
     @BindView(R.id.donateprojectRV)
     RecyclerView donateprojectRV;
-    private DonateProject_Adapter donateProject_adapter;
-
 
     @BindView(R.id.addProjectFBV)
     FloatingActionButton addProjectBTN;
 
-//    private FragmentActivity myContext;
-//    android.app.FragmentManager fragManager = myContext.getFragmentManager();
-
+    ArrayList<AcceptedProjects> projects;
+    private AcceptedProjectsAdapter acceptedAdapter;
 
     public static DonateProjectFragment newInstance() {
         DonateProjectFragment fragment = new DonateProjectFragment();
@@ -38,7 +51,6 @@ public class DonateProjectFragment extends Fragment implements DonateProject_Ada
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -51,31 +63,46 @@ public class DonateProjectFragment extends Fragment implements DonateProject_Ada
         donateprojectRV.setLayoutManager
                 (new LinearLayoutManager(getContext()
                         , LinearLayoutManager.VERTICAL, false));
-        donateProject_adapter = new DonateProject_Adapter(
-                R.layout.donateprojectrow, getContext(), this);
-        donateprojectRV.setAdapter(donateProject_adapter);
 
-//        donateprojectRV.addOnItemTouchListener(
-//                new RecyclerItemClickListener(this, donateprojectRV
-//                        , new RecyclerItemClickListener.OnItemClickListener() {
-//
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//
-//                        fragManager
-//                                .beginTransaction()
-//                                .replace(R.id.cointaner, ProjectDetailsFragment.newInstance())
-//                                .addToBackStack(null)
-//                                .commit();
-//                    }
-//
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//
-//                    }
-//                })
-//        );
+        Utilities.showLoadingDialog(getContext(), R.color.colorAccent);
 
+        ApiEndpointInterface apiService =
+                ApiClient.getClient(new AuthInterceptor(MyApplication.getPrefManager(getContext()).getUser().getToken())).create(ApiEndpointInterface.class);
+
+        Call<ArrayList<AcceptedProjects>> call = apiService.getAcceptedProjects();
+
+        call.enqueue(new Callback<ArrayList<AcceptedProjects>>() {
+            @Override
+            public void onResponse(Call<ArrayList<AcceptedProjects>> call, Response<ArrayList<AcceptedProjects>> response) {
+                Utilities.dismissLoadingDialog();
+                if (response.isSuccessful()) {
+                    projects = new ArrayList<>();
+                    projects = response.body();
+                    Timber.d(response.body().toString());
+
+                    acceptedAdapter = new AcceptedProjectsAdapter(
+                            R.layout.donate_history_row, response.body(), getContext(), new AcceptedProjectsAdapter.onProjectClickListner() {
+
+
+                        @Override
+                        public void onProjectClickListner(AcceptedProjects project) {
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.cointaner, ProjectDetailsFragment.newInstance(project))
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
+                    donateprojectRV.setAdapter(acceptedAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<AcceptedProjects>> call, Throwable t) {
+                Utilities.dismissLoadingDialog();
+                Timber.d(t.getMessage().toString());
+            }
+        });
 
         addProjectBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,19 +111,9 @@ public class DonateProjectFragment extends Fragment implements DonateProject_Ada
                 FragmentManager fm = getFragmentManager();
                 AddDonateProjectDialog donateDialog = new AddDonateProjectDialog();
                 donateDialog.show(fm, "Show fragment");
-
             }
         });
 
         return view;
-    }
-
-    @Override
-    public void onProjectClickListner() {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.cointaner, ProjectDetailsFragment.newInstance())
-                .addToBackStack(null)
-                .commit();
     }
 }

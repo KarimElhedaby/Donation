@@ -13,14 +13,15 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import donation.solutions.hamza.com.donation.R;
-import donation.solutions.hamza.com.donation.model.HistoryOfDonation;
+import donation.solutions.hamza.com.donation.model.AcceptedProjects;
 
 
-public class DonateHistory_Adapter extends RecyclerView.Adapter<DonateHistory_Adapter.VH> {
+public class AcceptedProjectsAdapter extends RecyclerView.Adapter<AcceptedProjectsAdapter.VH> {
 
     private int rowLayout;
     private Context context;
-    private ArrayList<HistoryOfDonation> donations;
+    private ArrayList<AcceptedProjects> acceptedProjects;
+    private onProjectClickListner onProjectClickListner;
 
 
     public static class VH extends RecyclerView.ViewHolder {
@@ -41,11 +42,13 @@ public class DonateHistory_Adapter extends RecyclerView.Adapter<DonateHistory_Ad
         }
     }
 
-    public DonateHistory_Adapter(int rowLayout, ArrayList<HistoryOfDonation> donationsHistory, Context context) {
+    public AcceptedProjectsAdapter(int rowLayout, ArrayList<AcceptedProjects> acceptedDonations, Context context, onProjectClickListner listner) {
 
         this.rowLayout = rowLayout;
         this.context = context;
-        this.donations = donationsHistory;
+        this.acceptedProjects = acceptedDonations;
+        this.onProjectClickListner = listner;
+
     }
 
     @Override
@@ -57,18 +60,29 @@ public class DonateHistory_Adapter extends RecyclerView.Adapter<DonateHistory_Ad
     @Override
     public void onBindViewHolder(VH holder, final int position) {
 
-        if (donations.get(position).getImg().size() != 0) {
-            Glide.with(context).load(donations.get(position).getImg().get(0)).into(holder.donateHIstoryIV);
+        if (acceptedProjects.get(position).getImg().size() != 0) {
+            Glide.with(context).load(acceptedProjects.get(position).getImg().get(0)).into(holder.donateHIstoryIV);
         }
-        holder.donateDateTV.setText(donations.get(position).getCreationDate());
-        holder.DonateDescriptionTV.setText(donations.get(position).getDesc());
-        holder.donateHistoryTitleTV.setText(donations.get(position).getTitle());
+        holder.donateDateTV.setText(acceptedProjects.get(position).getCreationDate());
+        holder.DonateDescriptionTV.setText(acceptedProjects.get(position).getDesc());
+        holder.donateHistoryTitleTV.setText(acceptedProjects.get(position).getTitle());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onProjectClickListner.onProjectClickListner(acceptedProjects.get(position));
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return donations.size();
+        return acceptedProjects.size();
+    }
+
+    public interface onProjectClickListner {
+        void onProjectClickListner(AcceptedProjects project);
+
     }
 
 

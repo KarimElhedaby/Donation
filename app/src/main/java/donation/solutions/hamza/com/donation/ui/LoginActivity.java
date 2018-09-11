@@ -74,9 +74,9 @@ public class LoginActivity extends AppCompatActivity {
             passwordET.setError(getString(R.string.enter_password));
         } else {
 
-            Utilities.showLoadingDialog(LoginActivity.this, R.color.colorAccent);
 
             User user = new User(phone, password);
+            Utilities.showLoadingDialog(LoginActivity.this, R.color.colorAccent);
 
             ApiEndpointInterface apiService =
                     ApiClient.getClient(new AuthInterceptor(null)).create(ApiEndpointInterface.class);

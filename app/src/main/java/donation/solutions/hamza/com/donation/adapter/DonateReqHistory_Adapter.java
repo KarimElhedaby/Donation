@@ -13,14 +13,14 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import donation.solutions.hamza.com.donation.R;
-import donation.solutions.hamza.com.donation.model.HistoryOfDonation;
+import donation.solutions.hamza.com.donation.model.RequestDonateHistory;
 
 
-public class DonateHistory_Adapter extends RecyclerView.Adapter<DonateHistory_Adapter.VH> {
+public class DonateReqHistory_Adapter extends RecyclerView.Adapter<DonateReqHistory_Adapter.VH> {
 
     private int rowLayout;
     private Context context;
-    private ArrayList<HistoryOfDonation> donations;
+    private ArrayList<RequestDonateHistory> donations;
 
 
     public static class VH extends RecyclerView.ViewHolder {
@@ -41,7 +41,7 @@ public class DonateHistory_Adapter extends RecyclerView.Adapter<DonateHistory_Ad
         }
     }
 
-    public DonateHistory_Adapter(int rowLayout, ArrayList<HistoryOfDonation> donationsHistory, Context context) {
+    public DonateReqHistory_Adapter(int rowLayout, ArrayList<RequestDonateHistory> donationsHistory, Context context) {
 
         this.rowLayout = rowLayout;
         this.context = context;

@@ -5,41 +5,39 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import donation.solutions.hamza.com.donation.R;
 
 
 public class DonateDetails_Adapter extends RecyclerView.Adapter<DonateDetails_Adapter.VH> {
 
     private int rowLayout;
     private Context context;
+    private List<String> images;
 
 //    private On_allCommunity_ClickListener on_allCommunity_clickListener;
 
     public static class VH extends RecyclerView.ViewHolder {
 
-
-//        TextView my_communityDescriptionTV;
-//        TextView my_communitynameTV;
-//        ImageView my_communityIV;
+        ImageView donateDetailsIV;
 
         public VH(View v) {
             super(v);
-//            my_communityDescriptionTV = (TextView) v.findViewById(R.id.my_communityDescriptionTV);
-//            my_communitynameTV = (TextView) v.findViewById(R.id.my_CommunityTitleTV);
-//            my_communityIV = (ImageView) v.findViewById(R.id.mycommunity_IV);
-
+            donateDetailsIV = v.findViewById(R.id.donateDetailsIV);
         }
     }
 
-    public DonateDetails_Adapter(int rowLayout, Context context) {
+    public DonateDetails_Adapter(int rowLayout, List<String> imgs, Context context) {
 
         this.rowLayout = rowLayout;
         this.context = context;
-//
-//        if (context instanceof On_allCommunity_ClickListener) {
-//            on_allCommunity_clickListener = (On_allCommunity_ClickListener) context;
-//        } else {
-//            throw new RuntimeException("Context must implement On_AllCommunity_ClickListener");
-//        }
+        this.images = imgs;
+
     }
 
     @Override
@@ -50,28 +48,15 @@ public class DonateDetails_Adapter extends RecyclerView.Adapter<DonateDetails_Ad
 
     @Override
     public void onBindViewHolder(VH holder, final int position) {
+        Glide.with(context).load(images.get(position)).into(holder.donateDetailsIV);
 
-//        holder.my_communityDescriptionTV.setText(String.valueOf(dataList.get(position).getCommunity_description()));
-//        holder.my_communitynameTV.setText(String.valueOf(dataList.get(position).getCommunity_name()));
-//        Glide.with(context).load(dataList.get(position).getCommunity_picture()).
-//                into(holder.my_communityIV);
-//
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                on_allCommunity_clickListener.on_allCommunity_Click(dataList.get(position));
-//            }
-//        });
+
     }
 
     @Override
     public int getItemCount() {
-        return 10 ;
+        return images.size();
     }
 
-//    public interface On_allCommunity_ClickListener {
-//        void on_allCommunity_Click(Community community);
-//
-//    }
 }
 

@@ -8,10 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import donation.solutions.hamza.com.donation.R;
 import donation.solutions.hamza.com.donation.adapter.DonateHistory_Adapter;
+import donation.solutions.hamza.com.donation.model.HistoryOfDonation;
+import donation.solutions.hamza.com.donation.service.ApiClient;
+import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
+import donation.solutions.hamza.com.donation.service.AuthInterceptor;
+import donation.solutions.hamza.com.donation.utils.MyApplication;
+import donation.solutions.hamza.com.donation.utils.Utilities;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class MyDonateHistoryFragment extends Fragment {
 
@@ -44,9 +56,37 @@ public class MyDonateHistoryFragment extends Fragment {
         myDonateHistoryRv.setLayoutManager
                 (new LinearLayoutManager(getContext()
                         , LinearLayoutManager.VERTICAL, false));
-        donateHistory_adapter = new DonateHistory_Adapter(
-                R.layout.donate_history_row, getContext());
-        myDonateHistoryRv.setAdapter(donateHistory_adapter);
+
+
+        Utilities.showLoadingDialog(getContext(), R.color.colorAccent);
+
+        ApiEndpointInterface apiService =
+                ApiClient.getClient(new AuthInterceptor(MyApplication.getPrefManager(getContext()).getUser().getToken())).create(ApiEndpointInterface.class);
+
+        Call<ArrayList<HistoryOfDonation>> call = apiService.getDonationHistory();
+
+        call.enqueue(new Callback<ArrayList<HistoryOfDonation>>() {
+            @Override
+            public void onResponse(Call<ArrayList<HistoryOfDonation>> call, Response<ArrayList<HistoryOfDonation>> response) {
+                Utilities.dismissLoadingDialog();
+                if (response.isSuccessful()) {
+                    Timber.d(response.body().toString());
+
+                    donateHistory_adapter = new DonateHistory_Adapter(
+                            R.layout.donate_history_row, response.body(), getContext());
+                    myDonateHistoryRv.setAdapter(donateHistory_adapter);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<HistoryOfDonation>> call, Throwable t) {
+                Utilities.dismissLoadingDialog();
+                Timber.d(t.getMessage().toString());
+            }
+        });
+
+
         return view;
     }
 
