@@ -18,6 +18,7 @@ public class ApiClient {
     public static final String BASE_URL = "https://donationp.herokuapp.com/";
 
     private static Retrofit retrofit = null;
+    private static AuthInterceptor mainAuthInterceptor;
 
     public static Retrofit getClient(AuthInterceptor authInterceptor) {
 
@@ -30,11 +31,10 @@ public class ApiClient {
                 .addInterceptor(interceptor);
 
 
-        clientBuilder.addInterceptor(authInterceptor);
-
-        client = clientBuilder.build();
-
-        if (retrofit == null) {
+        if (retrofit == null || mainAuthInterceptor.getAccessToken() == null) {
+            mainAuthInterceptor = authInterceptor;
+            clientBuilder.addInterceptor(mainAuthInterceptor);
+            client = clientBuilder.build();
             Gson gson = new GsonBuilder()
                     .setLenient()
                     .create();
@@ -48,4 +48,6 @@ public class ApiClient {
         }
         return retrofit;
     }
+
+
 }

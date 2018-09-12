@@ -35,7 +35,6 @@ import donation.solutions.hamza.com.donation.model.AddRequestResponce;
 import donation.solutions.hamza.com.donation.service.ApiClient;
 import donation.solutions.hamza.com.donation.service.ApiEndpointInterface;
 import donation.solutions.hamza.com.donation.service.AuthInterceptor;
-import donation.solutions.hamza.com.donation.utils.FileUtils;
 import donation.solutions.hamza.com.donation.utils.MyApplication;
 import donation.solutions.hamza.com.donation.utils.Utilities;
 import gun0912.tedbottompicker.TedBottomPicker;
@@ -51,28 +50,20 @@ public class AddDonateProjectDialog extends DialogFragment {
     //get access to Storage permsion
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     View view;
-    private DonationProjectImagesAdapter donateProject_adapter;
-
-    private ArrayList<Uri> images;
-
+    ArrayList<File> imagesFiles = new ArrayList<>();
     @BindView(R.id.projectIV)
     ImageView projectIV;
-
     @BindView(R.id.projectDescET)
     EditText projectDescET;
-
     @BindView(R.id.projectTitleET)
     EditText projectTitleET;
-
     @BindView(R.id.doneBTN)
     Button doneBTN;
-
     @BindView(R.id.donateprojectRV)
     RecyclerView donateProjectRV;
-
-
-    private List<MultipartBody.Part> imagessParts = new ArrayList<>();
     String requestTitle, requestDesc;
+    private DonationProjectImagesAdapter donateProject_adapter;
+    private ArrayList<MultipartBody.Part> imagessParts;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +71,7 @@ public class AddDonateProjectDialog extends DialogFragment {
         view = inflater.inflate(R.layout.add_donate_project_dialog, container, false);
         ButterKnife.bind(this, view);
 
-
+        imagessParts = new ArrayList<MultipartBody.Part>();
         projectIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,36 +92,10 @@ public class AddDonateProjectDialog extends DialogFragment {
                     Toast.makeText(getContext(), "Please enter project title", Toast.LENGTH_SHORT).show();
                 } else if (projectDescET.getText().toString().equals("")) {
                     Toast.makeText(getContext(), "Please enter project descreption", Toast.LENGTH_SHORT).show();
-                } else if (images.size() == 0) {
+                } else if (imagesFiles.size() == 0) {
                     Toast.makeText(getContext(), "Please select Project images", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    ApiEndpointInterface apiService =
-                            ApiClient.getClient(new AuthInterceptor(MyApplication.getPrefManager(getContext()).getUser().getToken())).create(ApiEndpointInterface.class);
-
-                    Call<AddRequestResponce> call = apiService.addRequest
-                            (RequestBody.create(MediaType.parse("text/plain"), requestTitle),
-                                    RequestBody.create(MediaType.parse("text/plain"), requestDesc),
-                                    imagessParts);
-
-                    call.enqueue(new Callback<AddRequestResponce>() {
-
-                        @Override
-                        public void onResponse(Call<AddRequestResponce> call, Response<AddRequestResponce> response) {
-                            Utilities.dismissLoadingDialog();
-                            if (response.isSuccessful()) {
-                                Timber.d(response.body().toString());
-                                dismiss();
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<AddRequestResponce> call, Throwable t) {
-                            Timber.d(t.getMessage());
-                        }
-                    });
-
+                    sendReq();
                 }
             }
         });
@@ -158,7 +123,7 @@ public class AddDonateProjectDialog extends DialogFragment {
                     @Override
                     public void onImagesSelected(ArrayList<Uri> uriList) {
                         // here is selected uri list
-                        images = uriList;
+
                         projectIV.setVisibility(View.GONE);
                         donateProjectRV.setVisibility(View.VISIBLE);
                         donateProjectRV.setLayoutManager
@@ -169,11 +134,9 @@ public class AddDonateProjectDialog extends DialogFragment {
                         donateProjectRV.setAdapter(donateProject_adapter);
 
 
-                        List<Uri> selectedImageUris = uriList;
-                        List<File> imagesFiles = new ArrayList<>();
-
-                        for (Uri uri : selectedImageUris) {
-                            File imageFile = FileUtils.getFile(getActivity(), uri);
+                        for (Uri uri : uriList) {
+                            String imagePath = getPath(getContext(), uri);
+                            File imageFile = new File(imagePath);
                             imagesFiles.add(imageFile);
                         }
                         convertImageFileToMultiPart(imagesFiles, imagessParts);
@@ -191,17 +154,64 @@ public class AddDonateProjectDialog extends DialogFragment {
 
     private void convertImageFileToMultiPart(List<File> imageFiles, List<MultipartBody.Part> imagesParts) {
 
-        for (int i = 0; i < imageFiles.size(); i++) {
-
-            File file = imageFiles.get(i);
+        for (File file : imageFiles) {
+            //Toast.makeText(getContext(), "file : " + file.getName().toString(), Toast.LENGTH_SHORT).show();
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
 
             MultipartBody.Part filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
             imagesParts.add(filePart);
 
         }
+
+
     }
 
+    public void sendReq() {
+        ApiEndpointInterface apiService =
+                ApiClient.getClient(new AuthInterceptor(MyApplication.getPrefManager(getContext()).getUser().getToken())).create(ApiEndpointInterface.class);
+
+        Call<AddRequestResponce> call = apiService.addRequest
+                (RequestBody.create(MediaType.parse("text/plain"), requestTitle),
+                        RequestBody.create(MediaType.parse("text/plain"), requestDesc),
+                        imagessParts);
+
+        call.enqueue(new Callback<AddRequestResponce>() {
+
+            @Override
+            public void onResponse(Call<AddRequestResponce> call, Response<AddRequestResponce> response) {
+                Utilities.dismissLoadingDialog();
+                if (response.isSuccessful()) {
+                    Timber.d(response.body().toString());
+                    Toast.makeText(getContext(), "Successfully send your project :)", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddRequestResponce> call, Throwable t) {
+                Timber.d(t.getMessage().toString());
+                Toast.makeText(getContext(), "Some thing went Wronge in your project..", Toast.LENGTH_SHORT).show();
+                dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    OpenImagePicker();// init the contact list
+                } else {
+                    // Permission Denied
+                    Toast.makeText(getContext(), "your message", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
     public static String getPath(final Context context, final Uri uri) {
 
@@ -271,7 +281,6 @@ public class AddDonateProjectDialog extends DialogFragment {
         return null;
     }
 
-
     public static String getDataColumn(Context context, Uri uri,
                                        String selection, String[] selectionArgs) {
 
@@ -327,22 +336,5 @@ public class AddDonateProjectDialog extends DialogFragment {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri
                 .getAuthority());
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE_ASK_PERMISSIONS:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    OpenImagePicker();// init the contact list
-                } else {
-                    // Permission Denied
-                    Toast.makeText(getContext(), "your message", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
     }
 }

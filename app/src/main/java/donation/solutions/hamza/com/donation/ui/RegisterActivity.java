@@ -57,10 +57,10 @@ public class RegisterActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.genderRB1:
-                        gender_index = "Male";
+                        gender_index = "male";
                         break;
                     case R.id.genderRB2:
-                        gender_index = "Female";
+                        gender_index = "female";
                         break;
 
                 }
@@ -100,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, R.string.check_gender, Toast.LENGTH_LONG).show();
         } else {
             Utilities.showLoadingDialog(RegisterActivity.this, R.color.colorAccent);
-            final User user = new User(userName, email, password, phone);
+            final User user = new User(userName, email, password, phone,gender);
 
             ApiEndpointInterface apiService =
                     ApiClient.getClient(new AuthInterceptor(null)).create(ApiEndpointInterface.class);
@@ -114,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Utilities.dismissLoadingDialog();
                     if (response.isSuccessful()) {
                         MyApplication.getPrefManager(RegisterActivity.this).storeUser(response.body());
-
+                        finish();
                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                     }
                 }

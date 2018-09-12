@@ -30,10 +30,8 @@ public interface ApiEndpointInterface {
     @POST("login")
     Call<UserResponce> signIn(@Body User user);
 
-
-
     @Multipart
-    @POST("request")
+    @POST("request/")
     Call<AddRequestResponce> addRequest(
             @Part("title") RequestBody title,
             @Part("desc") RequestBody desc,

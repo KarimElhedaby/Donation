@@ -75,8 +75,8 @@ public class MyPreferenceManager {
             phone = pref.getString(KEY_USER_PHONE, null);
             gender = pref.getString(KEY_USER_GENDER, null);
 
-            User user = new User(id, name, email, phone);
-            UserResponce userResponce = new UserResponce(user, token);
+            User user = new User(id,  name,email,phone,gender);
+            UserResponce userResponce=new UserResponce(user, token) ;
             return userResponce;
         }
         return null;

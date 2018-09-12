@@ -36,8 +36,8 @@
                 android:id="@+id/notificationTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="لقد حظى طفلك بيوم رائع , يمكنك الاطلاع على تفاصيله الا"
-                android:textColor="@color/colortest"
+                android:text="Some one have donate for you with 1 million dollar dudu.."
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <TextView
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="12h"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
 
