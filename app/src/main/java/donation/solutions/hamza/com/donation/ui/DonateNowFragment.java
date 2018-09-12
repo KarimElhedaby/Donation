@@ -64,9 +64,9 @@ public class DonateNowFragment extends DialogFragment {
     public void onViewClicked() {
 
         if (priceET.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), "Please enter price..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.price, Toast.LENGTH_SHORT).show();
         } else if (descET.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), "Please enter descrabtion..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.description, Toast.LENGTH_SHORT).show();
         } else {
             DonateModel model = new DonateModel(Integer.parseInt(priceET.getText().toString()), descET.getText().toString());
             Utilities.showLoadingDialog(getContext(), R.color.colorAccent);
@@ -81,7 +81,7 @@ public class DonateNowFragment extends DialogFragment {
                 public void onResponse(Call<DonateResponse> call, Response<DonateResponse> response) {
                     Utilities.dismissLoadingDialog();
                     if (response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Thank you :)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.thank, Toast.LENGTH_SHORT).show();
                         dismiss();
                     }
                 }

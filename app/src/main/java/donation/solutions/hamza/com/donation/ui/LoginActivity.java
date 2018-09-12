@@ -71,8 +71,8 @@ public class LoginActivity extends AppCompatActivity {
             emailET.setError(getString(R.string.phone_format));
         } else if (password.isEmpty()) {
             passwordET.setError(getString(R.string.enter_password));
-        } else {
-
+        }
+        else {
 
             User user = new User(phone, password);
             Utilities.showLoadingDialog(LoginActivity.this, R.color.colorAccent);
@@ -95,7 +95,8 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UserResponce> call, Throwable t) {
                     Utilities.dismissLoadingDialog();
-                    Toast.makeText(LoginActivity.this, "Error in mail or password", Toast.LENGTH_LONG).show();
+                    emailET.setError(getString(R.string.error_mail));
+
                 }
             });
 

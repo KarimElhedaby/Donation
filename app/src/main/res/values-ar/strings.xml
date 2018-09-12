@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Donation</string>
+    <string name="email_not_formatted">"صيغه الايميل غير صحيحه "</string>
+    <string name="enter_cpassword">"ادخل تاكيد الرقم السرى "</string>
+    <string name="enter_email">"ادخل الايميل "</string>
+    <string name="enter_password">"ادخل الرقم السرى "</string>
+    <string name="enter_name">"ادخل اسمك "</string>
+    <string name="title_notifications">الاشعارات</string>
+    <string name="title_home">المشاريع</string>
+    <string name="check_gender">"من فضلك ادخل النوع "</string>
+    <string name="phone_format">"صيغه رقم الموبايل خاطئه "</string>
+    <string name="project_title">من فضلك ادخل عنوان المشر</string>
+    <string name="project_description">من فضلك ادخل وصف المشروع</string>
+    <string name="project_images">"من فضلك ادخل صور  المشروع "</string>
+    <string name="price">من فضلك ادخل السعر</string>
+    <string name="thank">"شكرا لك "</string>
+    <string name="donate_history">"تاريخ تبرعى "</string>
+    <string name="ask_donate_history">تاريخ طلبى للمساعده</string>
+    <string name="error_mail">"خطا ف الايميل او الباسورد "</string>
+    <string name="male">ذكر</string>
+    <string name="female">انثى</string>
+    <string name="wrong">"شيئا ما حدث خطا "</string>
+</resources>

@@ -13,6 +13,7 @@ import donation.solutions.hamza.com.donation.ui.LoginActivity;
 public class MyApplication extends Application {
 
     private static MyPreferenceManager pref;
+    Context context ;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,9 +31,9 @@ public class MyApplication extends Application {
 
     public void logout() {
         pref.clear();
-        Intent intent = new Intent(this, LoginActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+//        Intent intent = new Intent(context, LoginActivity.class);
+////        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        startActivity(intent);
     }
 
 }

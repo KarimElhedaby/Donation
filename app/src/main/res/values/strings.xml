@@ -1,6 +1,7 @@
 <resources>
+
     <string name="app_name">Donation</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Projects</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
@@ -16,7 +17,18 @@
     <string name="phone_format">Phone not formated well</string>
     <string name="internal_storage">Internal Storage</string>
 
-    <string name="default_notification_channel_id" translatable="false">donation.solutions.hamza.com.donation.service.firebase</string>
-
+    <string name="default_notification_channel_id">donation.solutions.hamza.com.donation.service.firebase</string>
+    <string name="project_title">Please enter project title</string>
+    <string name="project_images">Please select Project images</string>
+    <string name="description">Please enter descreption..</string>
+    <string name="thank">Thank you :)</string>
+    <string name="donate_history">My Donation History</string>
+    <string name="ask_donate_history">Ask Donate History</string>
+    <string name="error_mail">Error in mail or password</string>
+    <string name="male">male</string>
+    <string name="female">female</string>
+    <string name="wrong">some thing went wrong</string>
+    <string name="project_description">Please enter project descreption</string>
+    <string name="price">Please enter price..</string>
 
 </resources>

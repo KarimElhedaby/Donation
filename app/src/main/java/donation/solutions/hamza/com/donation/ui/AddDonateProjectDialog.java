@@ -88,11 +88,11 @@ public class AddDonateProjectDialog extends DialogFragment {
                 requestDesc = projectDescET.getText().toString();
 
                 if (projectTitleET.getText().toString().equals("")) {
-                    Toast.makeText(getContext(), "Please enter project title", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.project_title, Toast.LENGTH_SHORT).show();
                 } else if (projectDescET.getText().toString().equals("")) {
-                    Toast.makeText(getContext(), "Please enter project descreption", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.project_description, Toast.LENGTH_SHORT).show();
                 } else if (imagesFiles.size() == 0) {
-                    Toast.makeText(getContext(), "Please select Project images", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.project_images, Toast.LENGTH_SHORT).show();
                 } else {
                     sendReq();
                 }

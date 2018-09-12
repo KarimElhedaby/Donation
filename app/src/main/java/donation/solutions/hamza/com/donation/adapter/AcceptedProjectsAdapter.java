@@ -63,7 +63,7 @@ public class AcceptedProjectsAdapter extends RecyclerView.Adapter<AcceptedProjec
         if (acceptedProjects.get(position).getImg().size() != 0) {
             Glide.with(context).load(acceptedProjects.get(position).getImg().get(0)).into(holder.donateHIstoryIV);
         }
-        holder.donateDateTV.setText(acceptedProjects.get(position).getCreationDate());
+        holder.donateDateTV.setText(acceptedProjects.get(position).getCreationDate().subSequence(0,10));
         holder.DonateDescriptionTV.setText(acceptedProjects.get(position).getDesc());
         holder.donateHistoryTitleTV.setText(acceptedProjects.get(position).getTitle());
 

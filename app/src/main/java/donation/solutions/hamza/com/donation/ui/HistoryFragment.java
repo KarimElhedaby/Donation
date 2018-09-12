@@ -84,9 +84,9 @@ public class HistoryFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "My Donation History ";
+                    return getString(R.string.donate_history);
                 case 1:
-                    return "Ask Donate History";
+                    return getString(R.string.ask_donate_history);
 
             }
             return null;

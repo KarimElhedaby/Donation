@@ -56,10 +56,10 @@ public class RegisterActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.genderRB1:
-                        gender_index = "male";
+                        gender_index = getString(R.string.male);
                         break;
                     case R.id.genderRB2:
-                        gender_index = "female";
+                        gender_index = getString(R.string.female);
                         break;
 
                 }
@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailET.setError(getString(R.string.email_not_formatted));
         } else if (!Patterns.PHONE.matcher(phone).matches()) {
-            emailET.setError(getString(R.string.phone_format));
+            phoneET.setError(getString(R.string.phone_format));
         } else if (password.isEmpty()) {
             PasswordET.setError(getString(R.string.enter_password));
         } else if (cPassword.isEmpty()) {
@@ -121,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<UserResponce> call, Throwable t) {
                     Utilities.dismissLoadingDialog();
-                    Toast.makeText(RegisterActivity.this, "some thing went wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, R.string.wrong, Toast.LENGTH_LONG).show();
                 }
             });
         }

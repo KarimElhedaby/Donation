@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements AHBottomNavigatio
         mainPageFragments.add(DonateProjectFragment.newInstance());
         mainPageFragments.add(HistoryFragment.newInstance());
         mainPageFragments.add(NotificationFragment.newInstance());
+        mainPageFragments.add(ProfileFragment.newInstance());
 
 
         AHBottomNavigation bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -54,15 +55,37 @@ public class MainActivity extends AppCompatActivity implements AHBottomNavigatio
 
             getSupportFragmentManager()
                     .beginTransaction()
+                    .replace(R.id.cointaner, ProfileFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+        } else if (position == 0) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.cointaner, DonateProjectFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+
+        } else if (position == 1) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.cointaner, HistoryFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+
+        } else if (position == 2) {
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.cointaner, NotificationFragment.newInstance())
                     .addToBackStack(null)
                     .commit();
-        } else
+
+        } else {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.cointaner, mainPageFragments.get(position))
                     .addToBackStack(null)
                     .commit();
+        }
         return true;
 
     }
